@@ -26,7 +26,7 @@ def init_db():
         conn.commit()
         conn.close()
 
-@app.route('/produtos', methods=['POST'])
+@app.route('/Cad', methods=['POST'])
 def add_produto():
     data = request.get_json()
     nome = data.get('nome')
@@ -52,7 +52,7 @@ def add_produto():
     conn.close()
     return jsonify({'message': 'Produto adicionado com sucesso!'}), 201
 
-@app.route('/cad', methods=['GET'])
+@app.route('/Produtos', methods=['GET'])
 def get_produtos():
     conn = sqlite3.connect('produtos.db')
     cursor = conn.cursor()
