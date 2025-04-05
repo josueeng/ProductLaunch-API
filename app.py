@@ -1,13 +1,13 @@
-# api de lancamento de produtos com sqlite3 e flask
 from flask import Flask, jsonify, request
+from flask_cors import CORS  # Importação correta do CORS
 import sqlite3
 import os
 
-
-
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas as rotas
+
 def init_db():
+    # Criação do banco de dados, se não existir
     if not os.path.exists('produtos.db'):
         conn = sqlite3.connect('produtos.db')
         cursor = conn.cursor()
@@ -30,6 +30,7 @@ def init_db():
 
 @app.route('/Cad', methods=['POST'])
 def add_produto():
+    # Rota para adicionar um produto
     data = request.get_json()
     nome = data.get('nome')
     descricao = data.get('descricao')
@@ -41,6 +42,7 @@ def add_produto():
     imge_url = data.get('imge_url')
     categoria = data.get('categoria')
     
+    # Validação para garantir que todos os campos sejam preenchidos
     if not all([nome, descricao, preco, quantidade, preco_real, desconto, tag, imge_url, categoria]):
         return jsonify({'message': 'Todos os campos são obrigatórios!'}), 400
 
@@ -56,6 +58,7 @@ def add_produto():
 
 @app.route('/Produtos', methods=['GET'])
 def get_produtos():
+    # Rota para listar os produtos
     conn = sqlite3.connect('produtos.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM produtos')
@@ -77,5 +80,6 @@ def get_produtos():
     return jsonify(produtos), 200
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Use a variável PORT ou padrão 5000
+    # Vinculando ao host e porta correta
+    port = int(os.environ.get("PORT", 5000))  # Usa a variável PORT ou padrão 5000
     app.run(host='0.0.0.0', port=port)
