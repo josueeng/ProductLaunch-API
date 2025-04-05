@@ -3,8 +3,10 @@ from flask import Flask, jsonify, request
 import sqlite3
 import os
 
-app = Flask(__name__)
 
+
+app = Flask(__name__)
+CORS(app)  # Habilita CORS para todas as rotas
 def init_db():
     if not os.path.exists('produtos.db'):
         conn = sqlite3.connect('produtos.db')
