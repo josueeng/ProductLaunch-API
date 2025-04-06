@@ -15,7 +15,7 @@ def init_db():
             CREATE TABLE IF NOT EXISTS produtos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome TEXT NOT NULL,
-                descricao TEXT, 
+                descricao TEXT NOT NULL,
                 preco REAL NOT NULL,
                 quantidade INTEGER NOT NULL,
                 preco_real REAL NOT NULL,
@@ -43,7 +43,7 @@ def add_produto():
     categoria = data.get('categoria')
     
     # Validação para garantir que todos os campos sejam preenchidos
-    if not all([nome, descricao, preco, quantidade, preco_real, desconto, tag, imge_url, categoria]):
+    if not all([nome, preco, preco_real, desconto, tag, imge_url]):
         return jsonify({'message': 'Todos os campos são obrigatórios!'}), 400
 
     conn = sqlite3.connect('produtos.db')
@@ -80,6 +80,8 @@ def get_produtos():
     return jsonify(produtos), 200
 
 if __name__ == '__main__':
+    # Inicializa o banco de dados antes de iniciar o servidor
+    init_db()
     # Vinculando ao host e porta correta
     port = int(os.environ.get("PORT", 5000))  # Usa a variável PORT ou padrão 5000
     app.run(host='0.0.0.0', port=port)
